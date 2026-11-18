@@ -3,3 +3,4 @@ maison/out/rendu_final.log
 __pycache__/
 maison/out/brut_*.png
 *.blend1
+maison/out/*.log

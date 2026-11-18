@@ -19,12 +19,12 @@
  },
  "contemporain": {
   "sud": {
-   "etat": "en_cours",
-   "src": null
+   "etat": "final",
+   "src": "img/rendu_contemporain_sud.jpg"
   },
   "aerienne": {
-   "etat": "en_cours",
-   "src": null
+   "etat": "final",
+   "src": "img/rendu_contemporain_aerienne.jpg"
   },
   "nord": {
    "etat": "en_cours",
