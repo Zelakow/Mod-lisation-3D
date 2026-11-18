@@ -787,7 +787,8 @@ def make_pine(name, h, seed):
     ob = bpy.data.objects.new(name, me); C_LIB.objects.link(ob)
     return ob
 
-pines = [make_pine(f"Sapin type {k}", 1.0, 100 + k) for k in range(3)]
+sys.path.insert(0, HERE); import sapin
+pines = [sapin.make_spruce(f"Épicéa type {k}", 100 + k, C_LIB) for k in range(3)]
 for p_ in pines: p_.location = (0, 0, -500)
 # groupe de densité de forêt sur le terrain proche
 dist = np.sqrt((NX - CX) ** 2 + (NY - CY) ** 2)
