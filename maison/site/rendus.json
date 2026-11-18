@@ -27,12 +27,12 @@
    "src": "img/rendu_contemporain_aerienne.jpg"
   },
   "nord": {
-   "etat": "en_cours",
-   "src": null
+   "etat": "final",
+   "src": "img/rendu_contemporain_nord.jpg"
   },
   "interieur": {
-   "etat": "en_cours",
-   "src": null
+   "etat": "final",
+   "src": "img/rendu_contemporain_interieur.jpg"
   }
  }
 }
