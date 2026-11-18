@@ -1,0 +1,38 @@
+{
+ "traditionnel": {
+  "sud": {
+   "etat": "apercu",
+   "src": "img/rendu_traditionnel_sud_apercu.jpg"
+  },
+  "aerienne": {
+   "etat": "apercu",
+   "src": "img/rendu_traditionnel_aerienne_apercu.jpg"
+  },
+  "nord": {
+   "etat": "en_cours",
+   "src": null
+  },
+  "interieur": {
+   "etat": "apercu",
+   "src": "img/rendu_traditionnel_interieur_apercu.jpg"
+  }
+ },
+ "contemporain": {
+  "sud": {
+   "etat": "en_cours",
+   "src": null
+  },
+  "aerienne": {
+   "etat": "en_cours",
+   "src": null
+  },
+  "nord": {
+   "etat": "en_cours",
+   "src": null
+  },
+  "interieur": {
+   "etat": "en_cours",
+   "src": null
+  }
+ }
+}

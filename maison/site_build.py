@@ -3,8 +3,21 @@ import os, shutil, glob
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT, SITE = os.path.join(HERE, "out"), os.path.join(HERE, "site")
 os.makedirs(os.path.join(SITE, "img"), exist_ok=True)
-for p in glob.glob(os.path.join(OUT, "rendu_*.jpg")):
-    if "_apercu" not in p: shutil.copy(p, os.path.join(SITE, "img", os.path.basename(p)))
+import json
+rendus = {}
+for v in ("traditionnel", "contemporain"):
+    for k in ("sud", "aerienne", "nord", "interieur"):
+        final, apercu = os.path.join(OUT, f"rendu_{v}_{k}.jpg"), os.path.join(OUT, f"rendu_{v}_{k}_apercu.jpg")
+        if os.path.exists(final):
+            shutil.copy(final, os.path.join(SITE, "img", os.path.basename(final))); etat = "final"; nom = os.path.basename(final)
+        elif os.path.exists(apercu) and not (v == "contemporain" and k == "sud"):
+            shutil.copy(apercu, os.path.join(SITE, "img", os.path.basename(apercu))); etat = "apercu"; nom = os.path.basename(apercu)
+        else:
+            etat, nom = "en_cours", None
+        rendus.setdefault(v, {})[k] = {"etat": etat, "src": f"img/{nom}" if nom else None}
+json.dump(rendus, open(os.path.join(SITE, "rendus.json"), "w"), indent=1)
+for p in ("avant_traditionnel_sud.jpg", "preuve_photorealisme_avant_apres.jpg", "preuve_sapin.png"):
+    if os.path.exists(os.path.join(OUT, p)): shutil.copy(os.path.join(OUT, p), os.path.join(SITE, "img", p))
 for p in glob.glob(os.path.join(OUT, "plans_*.png")) + glob.glob(os.path.join(OUT, "preuve_ifc_*.png")):
     shutil.copy(p, os.path.join(SITE, "img", os.path.basename(p)))
 for p in glob.glob(os.path.join(OUT, "chalet_*.json")):

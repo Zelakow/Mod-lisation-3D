@@ -46,6 +46,9 @@ h2{font:600 24px/1.15 var(--f-display);margin:0 0 6px;text-wrap:balance}
 .thumbs button[aria-pressed="true"]{border-color:var(--accent)}
 .thumbs img{width:100%;height:100%;object-fit:cover;display:block}
 .thumbs span{display:block}
+.pending{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px;color:var(--muted);font:500 13px var(--f-mono)}
+.badge{position:absolute;right:12px;top:12px;background:var(--accent);color:var(--accent-fg);font:600 11px var(--f-mono);letter-spacing:.04em;padding:4px 8px;border-radius:5px}
+.thumbs .ph{display:grid;place-items:center;height:100%;font:500 11px var(--f-mono);color:var(--muted);padding:6px;text-align:center}
 .vlabel{font:500 12px var(--f-mono);color:var(--muted);margin-top:4px;text-align:left}
 .two{display:grid;grid-template-columns:1.25fr 1fr;gap:26px;align-items:start}
 .two > *{min-width:0}
@@ -111,9 +114,9 @@ a{color:var(--accent)}
 <section id="rendus-sec">
   <div class="wrap">
     <h2>Rendus</h2>
-    <p class="sub">Calculés avec Blender Cycles (lumière physique, ciel atmosphérique, 1600 × 900 px). Le relief, la forêt et les sommets sont générés dans la scène, ce n'est pas une photo de fond.</p>
+    <p class="sub">Calculés avec Blender Cycles (lumière physique, ciel atmosphérique), puis post-traités comme une photo. Le relief, la forêt et les sommets sont générés dans la scène, ce n'est pas une photo de fond. Les images marquées « Aperçu » sont en basse définition ; les versions 1600 × 900 sont en cours de calcul.</p>
     <div class="hero">
-      <figure><img id="heroImg" alt="Rendu de la façade sud" src="img/rendu_traditionnel_sud.jpg"><span class="cap" id="heroCap">Façade sud · balcon et vallée</span></figure>
+      <figure><img id="heroImg" alt="Rendu de la façade sud"><div class="pending" id="heroPending" hidden>Rendu définitif en cours de calcul.<br>Il apparaîtra ici à la prochaine mise à jour.</div><span class="badge" id="heroBadge" hidden>Aperçu basse définition</span><span class="cap" id="heroCap">Façade sud · balcon et vallée</span></figure>
       <div class="thumbs" id="thumbs"></div>
     </div>
     <div class="two" style="margin-top:22px">
@@ -248,15 +251,32 @@ a{color:var(--accent)}
       <article class="step">
         <div>
           <span class="tag">Étape 3 · vérifié</span>
-          <h3>Scène Blender et rendus</h3>
-          <p>Blender 5.2 LTS piloté par script : bâtiment détaillé (volets, lambrequins, ferme de pignon, barres à neige, gouttières, appuis, poêle et conduit), relief alpin sur 16 km, environ 9 000 épicéas, 90 000 touffes d'herbe, ciel atmosphérique.</p>
+          <h3>Scène Blender et photoréalisme</h3>
+          <p>Blender 5.2 LTS piloté par script. Après ta remarque « on n'y est pas encore », chaque défaut a été corrigé puis contrôlé sur un aperçu, comparé à l'état précédent.</p>
           <ul>
-            <li>Aperçus rapides avant chaque rendu final, corrigés au fil de l'eau : sapins trop stylisés puis couchés, herbe en traits verticaux, montagnes facettées, poêle blanc, veinage de table en diagonale.</li>
-            <li>Rendus finaux : 4 vues par variante, en 1600 × 900.</li>
-            <li id="renderTimes">Temps de calcul : voir le journal dans le dépôt.</li>
+            <li>Lumière de fin d'après-midi rasante, caméra placée pour voir les ombres portées ; ciel moins brumeux avec nuages.</li>
+            <li>Sommets abaissés à l'ouest : ils faisaient de l'ombre au chalet.</li>
+            <li>Relief érodé, roche stratifiée, neige en altitude, perspective atmosphérique.</li>
+            <li>Prairie de 420 000 touffes (zones sèches et vertes), fleurs, chemin de gravier, clôture, salon de jardin, tas de bois.</li>
+            <li>Encrassement des façades (recoins, pied de mur), patine du zinc ; intérieur avec poutres et rideaux.</li>
+            <li>Post-traitement photo : courbe, halo des hautes lumières, vignettage, grain.</li>
           </ul>
         </div>
-        <img data-v-src="img/rendu_{v}_aerienne.jpg" src="img/rendu_traditionnel_aerienne.jpg" alt="Vue aérienne du site" loading="lazy">
+        <img src="img/preuve_photorealisme_avant_apres.jpg" alt="Comparaison avant / après sur la façade et le séjour" loading="lazy">
+      </article>
+      <article class="step">
+        <div>
+          <span class="tag">Étape 4 · vérifié</span>
+          <h3>Épicéas d'après photo</h3>
+          <p>Modèle refait à partir de ta photo de référence et testé seul avant intégration.</p>
+          <ul>
+            <li>Silhouette conique étroite (≈ 45 % de la hauteur), flèche fine au sommet.</li>
+            <li>Contour duveteux : chaque rameau est une chaîne de touffes d'aiguilles avec rameaux secondaires.</li>
+            <li>Pointes vert clair, cœur sombre, légère translucidité à contre-jour.</li>
+            <li>7 000 arbres placés sur les versants selon une carte de densité, vallée dégagée au sud.</li>
+          </ul>
+        </div>
+        <img src="img/preuve_sapin.png" alt="Banc d'essai de l'épicéa procédural" loading="lazy">
       </article>
     </div>
   </div>
@@ -293,17 +313,21 @@ a{color:var(--accent)}
     }
   };
   const VIEWS = [["sud","Façade sud · balcon et vallée"],["aerienne","Vue aérienne · le chalet dans son site"],["nord","Entrée nord-est · tas de bois"],["interieur","Séjour · vue sur la vallée"]];
-  let cur = "traditionnel", view = "sud";
+  let cur = "traditionnel", view = "sud", R = null;
+  const info = (v, k) => (R && R[v] && R[v][k]) || { etat: "en_cours", src: null };
   const $ = id => document.getElementById(id);
   function render(){
     const d = V[cur];
-    $("heroImg").src = `img/rendu_${cur}_${view}.jpg`;
+    const hi = info(cur, view);
+    $("heroImg").hidden = !hi.src; if (hi.src) $("heroImg").src = hi.src;
+    $("heroPending").hidden = !!hi.src; $("heroBadge").hidden = hi.etat !== "apercu";
     $("heroImg").alt = `Rendu ${d.nom}, ${VIEWS.find(x=>x[0]===view)[1]}`;
     $("heroCap").textContent = VIEWS.find(x=>x[0]===view)[1];
     const th = $("thumbs"); th.innerHTML = "";
     for (const [k,lab] of VIEWS){
       const b = document.createElement("button"); b.setAttribute("aria-pressed", String(k===view)); b.title = lab;
-      b.innerHTML = `<img alt="" loading="lazy" src="img/rendu_${cur}_${k}.jpg">`;
+      const ti = info(cur, k);
+      b.innerHTML = ti.src ? `<img alt="" loading="lazy" src="${ti.src}">` : `<span class="ph">En cours de calcul</span>`;
       b.onclick = () => { view = k; render(); };
       const wrap = document.createElement("div"); wrap.appendChild(b);
       const l = document.createElement("div"); l.className = "vlabel"; l.textContent = lab.split(" · ")[0]; wrap.appendChild(l);
@@ -325,5 +349,6 @@ a{color:var(--accent)}
   for (const b of document.querySelectorAll(".seg button")) b.onclick = () => { cur = b.dataset.v; try { history.replaceState(null, "", "#" + cur); } catch(_) {} render(); };
   window.addEventListener("hashchange", fromHash);
   render(); fromHash();
+  fetch("rendus.json").then(r => r.ok ? r.json() : null).then(j => { if (j) { R = j; render(); } }).catch(() => {});
 })();
 </script>

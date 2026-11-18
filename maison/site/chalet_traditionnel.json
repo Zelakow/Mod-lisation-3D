@@ -1,0 +1,1314 @@
+{
+ "projet": {
+  "nom": "Chalet R+1 — Traditionnelle",
+  "variante": "Variante A — Traditionnelle",
+  "description": "Socle enduit blanc, étage et pignon en bardage bois peint rouge oxyde, lambrequins blancs découpés, volets battants, balcon bois, zinc naturel.",
+  "site": "Montagne, altitude ~1 400 m, façade principale plein sud face à la vallée",
+  "surface_habitable_cible": 125
+ },
+ "unite": "m",
+ "niveaux": [
+  {
+   "id": "RDC",
+   "nom": "Rez-de-chaussée",
+   "altitude": 0,
+   "hauteur": 2.5
+  },
+  {
+   "id": "R+1",
+   "nom": "Étage",
+   "altitude": 2.75,
+   "hauteur": 2.5
+  }
+ ],
+ "defauts": {
+  "cadre": "menuiserie",
+  "porte": "laque",
+  "plafond": "plafond",
+  "sol": "prairie",
+  "chant": "soubassement"
+ },
+ "materiaux": {
+  "mur_rdc": {
+   "type": "enduit",
+   "couleur": "#efebe3"
+  },
+  "mur_r1": {
+   "type": "bois",
+   "couleur": "#8f2f24",
+   "echelle": 1.0
+  },
+  "interieur": {
+   "type": "peinture",
+   "couleur": "#f3f1ec"
+  },
+  "zinc": {
+   "type": "zinc",
+   "couleur": "#8e9396"
+  },
+  "menuiserie": {
+   "type": "peinture",
+   "couleur": "#f4f2ee"
+  },
+  "volet": {
+   "type": "bois",
+   "couleur": "#2f4a3a",
+   "echelle": 0.8
+  },
+  "lambrequin": {
+   "type": "peinture",
+   "couleur": "#f6f4ef"
+  },
+  "balcon": {
+   "type": "bois",
+   "couleur": "#f2efe8",
+   "echelle": 0.8
+  },
+  "sol_jour": {
+   "type": "parquet",
+   "couleur": "#c49a6c"
+  },
+  "sol_eau": {
+   "type": "carrelage",
+   "couleur": "#c9c4bb"
+  },
+  "soubassement": {
+   "type": "pierre",
+   "couleur": "#8d8a84"
+  },
+  "plafond": {
+   "type": "peinture",
+   "couleur": "#f7f6f2"
+  },
+  "verre": {
+   "type": "verre"
+  },
+  "neige": {
+   "type": "enduit",
+   "couleur": "#f4f7fa"
+  },
+  "prairie": {
+   "type": "gazon",
+   "couleur": "#6f7f45"
+  },
+  "escalier": {
+   "type": "bois",
+   "couleur": "#a9825a",
+   "echelle": 0.6
+  },
+  "tissu": {
+   "type": "tissu",
+   "couleur": "#c7bfb1"
+  },
+  "linge": {
+   "type": "tissu",
+   "couleur": "#efede8"
+  },
+  "chene": {
+   "type": "bois",
+   "couleur": "#b88b5e",
+   "echelle": 0.6
+  },
+  "laque": {
+   "type": "peinture",
+   "couleur": "#ecebe6"
+  },
+  "porte_entree": {
+   "type": "bois",
+   "couleur": "#5b3d29",
+   "echelle": 0.6
+  }
+ },
+ "murs": [
+  {
+   "niveau": "RDC",
+   "de": [
+    0,
+    0
+   ],
+   "a": [
+    11.2,
+    0
+   ],
+   "epaisseur": 0.4,
+   "facade": "sud",
+   "ouvertures": [
+    {
+     "type": "baie",
+     "position": 0.9,
+     "largeur": 2.6,
+     "hauteur": 2.25,
+     "allege": 0
+    },
+    {
+     "type": "baie",
+     "position": 4.4,
+     "largeur": 2.6,
+     "hauteur": 2.25,
+     "allege": 0
+    },
+    {
+     "type": "fenetre",
+     "position": 9.0,
+     "largeur": 1.0,
+     "hauteur": 1.1,
+     "allege": 1.0
+    }
+   ],
+   "materiau_ext": "mur_rdc",
+   "materiau_int": "interieur"
+  },
+  {
+   "niveau": "RDC",
+   "de": [
+    11.2,
+    0
+   ],
+   "a": [
+    11.2,
+    6.8
+   ],
+   "epaisseur": 0.4,
+   "facade": "est",
+   "ouvertures": [
+    {
+     "type": "fenetre",
+     "position": 1.0,
+     "largeur": 0.8,
+     "hauteur": 1.1,
+     "allege": 1.0
+    },
+    {
+     "type": "fenetre",
+     "position": 3.3,
+     "largeur": 0.5,
+     "hauteur": 0.6,
+     "allege": 1.5
+    },
+    {
+     "type": "fenetre",
+     "position": 5.0,
+     "largeur": 0.8,
+     "hauteur": 1.2,
+     "allege": 1.0
+    }
+   ],
+   "materiau_ext": "mur_rdc",
+   "materiau_int": "interieur"
+  },
+  {
+   "niveau": "RDC",
+   "de": [
+    11.2,
+    6.8
+   ],
+   "a": [
+    0,
+    6.8
+   ],
+   "epaisseur": 0.4,
+   "facade": "nord",
+   "ouvertures": [
+    {
+     "type": "porte",
+     "position": 0.5,
+     "largeur": 1.0,
+     "hauteur": 2.2,
+     "entree": true,
+     "materiau": "porte_entree"
+    },
+    {
+     "type": "fenetre",
+     "position": 7.6,
+     "largeur": 1.4,
+     "hauteur": 1.0,
+     "allege": 1.1
+    },
+    {
+     "type": "fenetre",
+     "position": 9.6,
+     "largeur": 1.0,
+     "hauteur": 1.0,
+     "allege": 1.1
+    }
+   ],
+   "materiau_ext": "mur_rdc",
+   "materiau_int": "interieur"
+  },
+  {
+   "niveau": "RDC",
+   "de": [
+    0,
+    6.8
+   ],
+   "a": [
+    0,
+    0
+   ],
+   "epaisseur": 0.4,
+   "facade": "ouest",
+   "ouvertures": [
+    {
+     "type": "fenetre",
+     "position": 1.2,
+     "largeur": 1.2,
+     "hauteur": 1.25,
+     "allege": 1.0
+    },
+    {
+     "type": "baie",
+     "position": 3.8,
+     "largeur": 1.8,
+     "hauteur": 2.25,
+     "allege": 0
+    }
+   ],
+   "materiau_ext": "mur_rdc",
+   "materiau_int": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    0,
+    0
+   ],
+   "a": [
+    11.2,
+    0
+   ],
+   "epaisseur": 0.4,
+   "facade": "sud",
+   "ouvertures": [
+    {
+     "type": "baie",
+     "position": 1.3,
+     "largeur": 1.6,
+     "hauteur": 2.2,
+     "allege": 0,
+     "porte_fenetre": true
+    },
+    {
+     "type": "baie",
+     "position": 5.0,
+     "largeur": 1.6,
+     "hauteur": 2.2,
+     "allege": 0,
+     "porte_fenetre": true
+    },
+    {
+     "type": "baie",
+     "position": 8.5,
+     "largeur": 1.6,
+     "hauteur": 2.2,
+     "allege": 0,
+     "porte_fenetre": true
+    }
+   ],
+   "materiau_ext": "mur_r1",
+   "materiau_int": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    11.2,
+    0
+   ],
+   "a": [
+    11.2,
+    6.8
+   ],
+   "epaisseur": 0.4,
+   "facade": "est",
+   "ouvertures": [
+    {
+     "type": "fenetre",
+     "position": 2.0,
+     "largeur": 1.0,
+     "hauteur": 1.25,
+     "allege": 1.0
+    },
+    {
+     "type": "fenetre",
+     "position": 5.0,
+     "largeur": 0.8,
+     "hauteur": 1.25,
+     "allege": 1.0
+    }
+   ],
+   "materiau_ext": "mur_r1",
+   "materiau_int": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    11.2,
+    6.8
+   ],
+   "a": [
+    0,
+    6.8
+   ],
+   "epaisseur": 0.4,
+   "facade": "nord",
+   "ouvertures": [
+    {
+     "type": "fenetre",
+     "position": 3.5,
+     "largeur": 1.0,
+     "hauteur": 1.0,
+     "allege": 1.2
+    },
+    {
+     "type": "fenetre",
+     "position": 6.9,
+     "largeur": 0.4,
+     "hauteur": 0.6,
+     "allege": 1.5
+    },
+    {
+     "type": "fenetre",
+     "position": 9.0,
+     "largeur": 1.0,
+     "hauteur": 0.9,
+     "allege": 1.3
+    }
+   ],
+   "materiau_ext": "mur_r1",
+   "materiau_int": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    0,
+    6.8
+   ],
+   "a": [
+    0,
+    0
+   ],
+   "epaisseur": 0.4,
+   "facade": "ouest",
+   "ouvertures": [
+    {
+     "type": "fenetre",
+     "position": 1.5,
+     "largeur": 0.8,
+     "hauteur": 1.25,
+     "allege": 1.0
+    },
+    {
+     "type": "fenetre",
+     "position": 4.6,
+     "largeur": 1.0,
+     "hauteur": 1.25,
+     "allege": 1.0
+    }
+   ],
+   "materiau_ext": "mur_r1",
+   "materiau_int": "interieur"
+  },
+  {
+   "niveau": "RDC",
+   "de": [
+    7.8,
+    0
+   ],
+   "a": [
+    7.8,
+    4.45
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "RDC",
+   "de": [
+    7.8,
+    2.6
+   ],
+   "a": [
+    11.2,
+    2.6
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [
+    {
+     "type": "porte",
+     "position": 0.4,
+     "largeur": 0.83,
+     "hauteur": 2.04
+    }
+   ],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "RDC",
+   "de": [
+    9.6,
+    2.6
+   ],
+   "a": [
+    9.6,
+    4.45
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [
+    {
+     "type": "porte",
+     "position": 0.5,
+     "largeur": 0.73,
+     "hauteur": 2.04
+    }
+   ],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "RDC",
+   "de": [
+    9.6,
+    4.45
+   ],
+   "a": [
+    11.2,
+    4.45
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    0,
+    3.95
+   ],
+   "a": [
+    11.2,
+    3.95
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [
+    {
+     "type": "porte",
+     "position": 2.6,
+     "largeur": 0.83,
+     "hauteur": 2.04
+    },
+    {
+     "type": "porte",
+     "position": 4.3,
+     "largeur": 0.83,
+     "hauteur": 2.04
+    },
+    {
+     "type": "porte",
+     "position": 8.0,
+     "largeur": 0.83,
+     "hauteur": 2.04
+    }
+   ],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    4.0,
+    0
+   ],
+   "a": [
+    4.0,
+    3.95
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    7.6,
+    0
+   ],
+   "a": [
+    7.6,
+    3.95
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    3.6,
+    3.95
+   ],
+   "a": [
+    3.6,
+    6.8
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [
+    {
+     "type": "porte",
+     "position": 0.15,
+     "largeur": 0.83,
+     "hauteur": 2.04
+    }
+   ],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    3.6,
+    5.05
+   ],
+   "a": [
+    4.7,
+    5.05
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [
+    {
+     "type": "porte",
+     "position": 0.15,
+     "largeur": 0.73,
+     "hauteur": 2.04
+    }
+   ],
+   "materiau": "interieur"
+  },
+  {
+   "niveau": "R+1",
+   "de": [
+    4.7,
+    5.05
+   ],
+   "a": [
+    4.7,
+    6.8
+   ],
+   "epaisseur": 0.1,
+   "interieur": true,
+   "ouvertures": [],
+   "materiau": "interieur"
+  }
+ ],
+ "dalles": [
+  {
+   "niveau": "RDC",
+   "contour": [
+    [
+     0,
+     0
+    ],
+    [
+     7.8,
+     0
+    ],
+    [
+     7.8,
+     6.8
+    ],
+    [
+     0,
+     6.8
+    ]
+   ],
+   "epaisseur": 0.25,
+   "materiau": "sol_jour"
+  },
+  {
+   "niveau": "RDC",
+   "contour": [
+    [
+     7.8,
+     0
+    ],
+    [
+     11.2,
+     0
+    ],
+    [
+     11.2,
+     6.8
+    ],
+    [
+     7.8,
+     6.8
+    ]
+   ],
+   "epaisseur": 0.25,
+   "materiau": "sol_eau"
+  },
+  {
+   "niveau": "RDC",
+   "nom": "Terrasse",
+   "contour": [
+    [
+     -0.2,
+     -3.2
+    ],
+    [
+     7.6,
+     -3.2
+    ],
+    [
+     7.6,
+     -0.2
+    ],
+    [
+     -0.2,
+     -0.2
+    ]
+   ],
+   "altitude": -0.05,
+   "epaisseur": 0.4,
+   "materiau": "soubassement"
+  },
+  {
+   "niveau": "RDC",
+   "nom": "Parvis d'entrée",
+   "contour": [
+    [
+     9.4,
+     6.8
+    ],
+    [
+     11.0,
+     6.8
+    ],
+    [
+     11.0,
+     8.2
+    ],
+    [
+     9.4,
+     8.2
+    ]
+   ],
+   "altitude": -0.05,
+   "epaisseur": 0.3,
+   "materiau": "soubassement"
+  },
+  {
+   "niveau": "R+1",
+   "contour": [
+    [
+     0,
+     0
+    ],
+    [
+     11.2,
+     0
+    ],
+    [
+     11.2,
+     6.8
+    ],
+    [
+     0,
+     6.8
+    ]
+   ],
+   "epaisseur": 0.25,
+   "materiau": "sol_jour",
+   "tremies": [
+    [
+     [
+      5.640000000000001,
+      5.6
+     ],
+     [
+      9.8,
+      5.6
+     ],
+     [
+      9.8,
+      6.6
+     ],
+     [
+      5.640000000000001,
+      6.6
+     ]
+    ]
+   ]
+  },
+  {
+   "niveau": "R+1",
+   "nom": "Sol salle de bain",
+   "contour": [
+    [
+     0.2,
+     4.0
+    ],
+    [
+     3.55,
+     4.0
+    ],
+    [
+     3.55,
+     6.6
+    ],
+    [
+     0.2,
+     6.6
+    ]
+   ],
+   "altitude": 2.756,
+   "epaisseur": 0.01,
+   "materiau": "sol_eau"
+  },
+  {
+   "niveau": "R+1",
+   "nom": "Balcon",
+   "contour": [
+    [
+     -0.6,
+     -1.6
+    ],
+    [
+     11.799999999999999,
+     -1.6
+    ],
+    [
+     11.799999999999999,
+     -0.2
+    ],
+    [
+     -0.6,
+     -0.2
+    ]
+   ],
+   "altitude": 2.72,
+   "epaisseur": 0.2,
+   "materiau": "balcon",
+   "balcon": true
+  }
+ ],
+ "escaliers": [
+  {
+   "niveau": "RDC",
+   "materiau": "escalier",
+   "depart": [
+    9.8,
+    6.1
+   ],
+   "direction": "ouest",
+   "largeur": 1.0,
+   "marches": 16,
+   "giron": 0.26
+  }
+ ],
+ "toiture": {
+  "type": "deux_pans",
+  "niveau": "R+1",
+  "faitage": "y",
+  "pente": 30,
+  "debord": 0.9,
+  "debord_pignon": 1.2,
+  "epaisseur": 0.3,
+  "materiau": "zinc",
+  "materiau_sous_face": "balcon"
+ },
+ "pieces": [
+  {
+   "niveau": "RDC",
+   "nom": "Séjour – cuisine",
+   "contour": [
+    [
+     0.2,
+     0.2
+    ],
+    [
+     7.75,
+     0.2
+    ],
+    [
+     7.75,
+     5.6
+    ],
+    [
+     5.640000000000001,
+     5.6
+    ],
+    [
+     5.640000000000001,
+     6.6
+    ],
+    [
+     0.2,
+     6.6
+    ]
+   ]
+  },
+  {
+   "niveau": "RDC",
+   "nom": "Entrée",
+   "contour": [
+    [
+     7.85,
+     2.65
+    ],
+    [
+     9.55,
+     2.65
+    ],
+    [
+     9.55,
+     4.5
+    ],
+    [
+     11.0,
+     4.5
+    ],
+    [
+     11.0,
+     6.6
+    ],
+    [
+     9.8,
+     6.6
+    ],
+    [
+     9.8,
+     5.6
+    ],
+    [
+     7.75,
+     5.6
+    ],
+    [
+     7.75,
+     4.45
+    ],
+    [
+     7.85,
+     4.45
+    ]
+   ]
+  },
+  {
+   "niveau": "RDC",
+   "nom": "Buanderie – local skis",
+   "contour": [
+    [
+     7.85,
+     0.2
+    ],
+    [
+     11.0,
+     0.2
+    ],
+    [
+     11.0,
+     2.55
+    ],
+    [
+     7.85,
+     2.55
+    ]
+   ]
+  },
+  {
+   "niveau": "RDC",
+   "nom": "WC",
+   "contour": [
+    [
+     9.65,
+     2.65
+    ],
+    [
+     11.0,
+     2.65
+    ],
+    [
+     11.0,
+     4.4
+    ],
+    [
+     9.65,
+     4.4
+    ]
+   ]
+  },
+  {
+   "niveau": "R+1",
+   "nom": "Chambre 1 (parents)",
+   "contour": [
+    [
+     0.2,
+     0.2
+    ],
+    [
+     3.95,
+     0.2
+    ],
+    [
+     3.95,
+     3.9
+    ],
+    [
+     0.2,
+     3.9
+    ]
+   ]
+  },
+  {
+   "niveau": "R+1",
+   "nom": "Chambre 2",
+   "contour": [
+    [
+     4.05,
+     0.2
+    ],
+    [
+     7.55,
+     0.2
+    ],
+    [
+     7.55,
+     3.9
+    ],
+    [
+     4.05,
+     3.9
+    ]
+   ]
+  },
+  {
+   "niveau": "R+1",
+   "nom": "Chambre 3",
+   "contour": [
+    [
+     7.65,
+     0.2
+    ],
+    [
+     11.0,
+     0.2
+    ],
+    [
+     11.0,
+     3.9
+    ],
+    [
+     7.65,
+     3.9
+    ]
+   ]
+  },
+  {
+   "niveau": "R+1",
+   "nom": "Salle de bain",
+   "contour": [
+    [
+     0.2,
+     4.0
+    ],
+    [
+     3.55,
+     4.0
+    ],
+    [
+     3.55,
+     6.6
+    ],
+    [
+     0.2,
+     6.6
+    ]
+   ]
+  },
+  {
+   "niveau": "R+1",
+   "nom": "WC",
+   "contour": [
+    [
+     3.65,
+     5.1
+    ],
+    [
+     4.65,
+     5.1
+    ],
+    [
+     4.65,
+     6.6
+    ],
+    [
+     3.65,
+     6.6
+    ]
+   ]
+  },
+  {
+   "niveau": "R+1",
+   "nom": "Palier",
+   "contour": [
+    [
+     3.65,
+     4.0
+    ],
+    [
+     11.0,
+     4.0
+    ],
+    [
+     11.0,
+     6.6
+    ],
+    [
+     9.8,
+     6.6
+    ],
+    [
+     9.8,
+     5.6
+    ],
+    [
+     5.640000000000001,
+     5.6
+    ],
+    [
+     5.640000000000001,
+     6.6
+    ],
+    [
+     4.75,
+     6.6
+    ],
+    [
+     4.75,
+     5.05
+    ],
+    [
+     3.65,
+     5.05
+    ]
+   ]
+  }
+ ],
+ "mobilier": [
+  {
+   "niveau": "RDC",
+   "type": "canape",
+   "position": [
+    2.4,
+    2.8
+   ],
+   "dimensions": [
+    2.6,
+    1.0,
+    0.8
+   ],
+   "rotation": 180,
+   "materiau": "tissu"
+  },
+  {
+   "niveau": "RDC",
+   "type": "boite",
+   "nom": "Table basse",
+   "position": [
+    2.4,
+    1.7
+   ],
+   "dimensions": [
+    1.2,
+    0.6,
+    0.38
+   ],
+   "materiau": "chene"
+  },
+  {
+   "niveau": "RDC",
+   "type": "boite",
+   "nom": "Poêle à bois",
+   "position": [
+    5.2,
+    1.0
+   ],
+   "dimensions": [
+    0.55,
+    0.5,
+    1.1
+   ],
+   "materiau": "menuiserie"
+  },
+  {
+   "niveau": "RDC",
+   "type": "table",
+   "position": [
+    5.6,
+    3.6
+   ],
+   "dimensions": [
+    2.2,
+    1.0,
+    0.75
+   ],
+   "materiau": "chene"
+  },
+  {
+   "niveau": "RDC",
+   "type": "boite",
+   "nom": "Cuisine linéaire",
+   "position": [
+    2.4,
+    6.27
+   ],
+   "dimensions": [
+    4.0,
+    0.65,
+    0.9
+   ],
+   "materiau": "laque"
+  },
+  {
+   "niveau": "RDC",
+   "type": "boite",
+   "nom": "Îlot",
+   "position": [
+    2.4,
+    4.9
+   ],
+   "dimensions": [
+    2.4,
+    0.9,
+    0.92
+   ],
+   "materiau": "chene"
+  },
+  {
+   "niveau": "RDC",
+   "type": "boite",
+   "nom": "Banc d'entrée",
+   "position": [
+    10.6,
+    5.6
+   ],
+   "dimensions": [
+    0.45,
+    1.4,
+    0.45
+   ],
+   "materiau": "chene"
+  },
+  {
+   "niveau": "R+1",
+   "type": "lit",
+   "position": [
+    2.1,
+    2.7
+   ],
+   "dimensions": [
+    1.6,
+    2.0,
+    0.55
+   ],
+   "rotation": 0,
+   "materiau": "chene"
+  },
+  {
+   "niveau": "R+1",
+   "type": "lit",
+   "position": [
+    5.8,
+    2.8
+   ],
+   "dimensions": [
+    1.4,
+    1.9,
+    0.55
+   ],
+   "materiau": "chene"
+  },
+  {
+   "niveau": "R+1",
+   "type": "lit",
+   "position": [
+    9.3,
+    2.8
+   ],
+   "dimensions": [
+    1.4,
+    1.9,
+    0.55
+   ],
+   "materiau": "chene"
+  },
+  {
+   "niveau": "R+1",
+   "type": "boite",
+   "nom": "Baignoire",
+   "position": [
+    1.05,
+    5.5
+   ],
+   "dimensions": [
+    0.75,
+    1.7,
+    0.55
+   ],
+   "materiau": "laque"
+  },
+  {
+   "niveau": "R+1",
+   "type": "boite",
+   "nom": "Double vasque",
+   "position": [
+    2.2,
+    6.35
+   ],
+   "dimensions": [
+    1.4,
+    0.5,
+    0.85
+   ],
+   "materiau": "chene"
+  },
+  {
+   "niveau": "R+1",
+   "type": "boite",
+   "nom": "Garde-corps trémie",
+   "position": [
+    7.720000000000001,
+    5.58
+   ],
+   "dimensions": [
+    4.16,
+    0.03,
+    1.0
+   ],
+   "materiau": "verre"
+  }
+ ],
+ "style": {
+  "nom": "Variante A — Traditionnelle",
+  "resume": "Socle enduit blanc, étage et pignon en bardage bois peint rouge oxyde, lambrequins blancs découpés, volets battants, balcon bois, zinc naturel.",
+  "volets": true,
+  "lambrequins": true,
+  "garde_corps": "bois",
+  "oeil_de_boeuf": true,
+  "toit_couleur": "zinc naturel"
+ },
+ "visite": {
+  "depart": [
+   10.2,
+   13.0
+  ],
+  "orientation": 180,
+  "niveau": "RDC"
+ }
+}
