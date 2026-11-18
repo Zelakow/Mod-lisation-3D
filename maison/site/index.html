@@ -114,7 +114,7 @@ a{color:var(--accent)}
 <section id="rendus-sec">
   <div class="wrap">
     <h2>Rendus</h2>
-    <p class="sub">Calculés avec Blender Cycles (lumière physique, ciel atmosphérique), puis post-traités comme une photo. Le relief, la forêt et les sommets sont générés dans la scène, ce n'est pas une photo de fond. Les images marquées « Aperçu » sont en basse définition ; les versions 1600 × 900 sont en cours de calcul.</p>
+    <p class="sub">Calculés avec Blender Cycles (lumière physique, ciel atmosphérique), puis post-traités comme une photo. Le relief, la forêt et les sommets sont générés dans la scène, ce n'est pas une photo de fond. 8 rendus en 1600 × 900 : 4 vues par variante.</p>
     <div class="hero">
       <figure><img id="heroImg" alt="Rendu de la façade sud"><div class="pending" id="heroPending" hidden>Rendu définitif en cours de calcul.<br>Il apparaîtra ici à la prochaine mise à jour.</div><span class="badge" id="heroBadge" hidden>Aperçu basse définition</span><span class="cap" id="heroCap">Façade sud · balcon et vallée</span></figure>
       <div class="thumbs" id="thumbs"></div>
@@ -177,7 +177,7 @@ a{color:var(--accent)}
         <thead><tr><th>Fichier</th><th>Pour</th><th>Ce que vous pouvez y faire</th><th class="num">Taille A</th></tr></thead>
         <tbody>
           <tr><td><span class="path">chalet_traditionnel.ifc</span></td><td>Revit, Archicad, Bonsai, FreeCAD</td><td>Objets métier par niveau : 20 murs (composition 4 couches), 19 à 20 fenêtres, 8 portes, dalles avec trémie, toiture, escalier, garde-corps, 10 pièces avec leur surface, mobilier.</td><td class="num">303 Ko</td></tr>
-          <tr><td><span class="path">chalet_traditionnel.blend</span></td><td>Blender (gratuit)</td><td>La scène complète des rendus : bâtiment détaillé, matériaux, relief, forêt, ciel, soleil et 4 caméras. Objets rangés par collections (RDC, R+1, Toiture, Menuiseries, Détails de façade, Mobilier, Site).</td><td class="num">9,3 Mo</td></tr>
+          <tr><td><span class="path">chalet_traditionnel.blend</span></td><td>Blender (gratuit)</td><td>La scène complète des rendus : bâtiment détaillé, matériaux, relief, forêt, ciel, soleil et 4 caméras. Objets rangés par collections (RDC, R+1, Toiture, Menuiseries, Détails de façade, Mobilier, Site).</td><td class="num">26,6 Mo</td></tr>
           <tr><td><span class="path">chalet_traditionnel.glb</span></td><td>Twinmotion, D5, SketchUp, Blender</td><td>Le bâtiment seul en maillage, prêt à être habillé avec les bibliothèques de ces logiciels (végétation, personnages, véhicules).</td><td class="num">5,5 Mo</td></tr>
           <tr><td><span class="path">chalet_traditionnel.json</span></td><td>Régénérer le projet</td><td>La source unique : murs, ouvertures, niveaux, matériaux. Les scripts du dossier <span class="path">maison/</span> refont plans, IFC, scène et rendus à partir de ce fichier.</td><td class="num">17 Ko</td></tr>
           <tr><td><span class="path">plans_traditionnel.svg</span></td><td>Illustrator, Inkscape, AutoCAD (via import)</td><td>Plans et coupe en vectoriel.</td><td class="num">238 Ko</td></tr>
@@ -260,6 +260,7 @@ a{color:var(--accent)}
             <li>Prairie de 420 000 touffes (zones sèches et vertes), fleurs, chemin de gravier, clôture, salon de jardin, tas de bois.</li>
             <li>Encrassement des façades (recoins, pied de mur), patine du zinc ; intérieur avec poutres et rideaux.</li>
             <li>Post-traitement photo : courbe, halo des hautes lumières, vignettage, grain.</li>
+            <li>Rendus définitifs 1600 × 900 : 7 à 15 min par vue sur 4 cœurs CPU.</li>
           </ul>
         </div>
         <img src="img/preuve_photorealisme_avant_apres.jpg" alt="Comparaison avant / après sur la façade et le séjour" loading="lazy">
