@@ -1,20 +1,20 @@
 {
  "traditionnel": {
   "sud": {
-   "etat": "apercu",
-   "src": "img/rendu_traditionnel_sud_apercu.jpg"
+   "etat": "final",
+   "src": "img/rendu_traditionnel_sud.jpg"
   },
   "aerienne": {
-   "etat": "apercu",
-   "src": "img/rendu_traditionnel_aerienne_apercu.jpg"
+   "etat": "final",
+   "src": "img/rendu_traditionnel_aerienne.jpg"
   },
   "nord": {
-   "etat": "en_cours",
-   "src": null
+   "etat": "final",
+   "src": "img/rendu_traditionnel_nord.jpg"
   },
   "interieur": {
-   "etat": "apercu",
-   "src": "img/rendu_traditionnel_interieur_apercu.jpg"
+   "etat": "final",
+   "src": "img/rendu_traditionnel_interieur.jpg"
   }
  },
  "contemporain": {
