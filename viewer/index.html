@@ -590,7 +590,7 @@ const SAMPLE = {
     const gableMat = (test) => { const w = ext.find(test); return mat(w && (w.materiau_ext || w.materiau), D.mur_ext); };
     const tri = (u0, u1, um, rise) => { const sh = new THREE.Shape([new THREE.Vector2(u0, base), new THREE.Vector2(u1, base), new THREE.Vector2(um, base + rise)]); return sh; };
     if (alongX) {
-      const half = (by1 - by0) / 2, mid = (by0 + by1) / 2, rise = half * tp, cx = (bx0 + bx1) / 2, W = bx1 - bx0 + 2 * deb;
+      const half = (by1 - by0) / 2, mid = (by0 + by1) / 2, rise = half * tp, cx = (bx0 + bx1) / 2, W = bx1 - bx0 + 2 * (r.debord_pignon ?? deb);
       for (const s of [-1, 1]) pane(new V3(cx, base - deb * tp, -(mid + s * (half + deb))), new V3(cx, base + rise, -mid), new V3(1, 0, 0), W);
       for (const axX of [ax0, ax1]) {
         const geo = new THREE.ExtrudeGeometry(tri(by0, by1, mid, rise), { depth: tm, bevelEnabled: false });
@@ -598,7 +598,7 @@ const SAMPLE = {
         m.rotation.y = Math.PI / 2; m.position.x = axX - tm / 2; m.castShadow = m.receiveShadow = true; root.add(m);
       }
     } else {
-      const half = (bx1 - bx0) / 2, mid = (bx0 + bx1) / 2, rise = half * tp, cy = (by0 + by1) / 2, W = by1 - by0 + 2 * deb;
+      const half = (bx1 - bx0) / 2, mid = (bx0 + bx1) / 2, rise = half * tp, cy = (by0 + by1) / 2, W = by1 - by0 + 2 * (r.debord_pignon ?? deb);
       for (const s of [-1, 1]) pane(new V3(mid + s * (half + deb), base - deb * tp, -cy), new V3(mid, base + rise, -cy), new V3(0, 0, 1), W);
       for (const axY of [ay0, ay1]) {
         const geo = new THREE.ExtrudeGeometry(tri(bx0, bx1, mid, rise), { depth: tm, bevelEnabled: false });
@@ -919,8 +919,18 @@ const SAMPLE = {
   if (window.ResizeObserver) new ResizeObserver(resize).observe(stage); else window.addEventListener('resize', resize);
   resize();
 
-  load(SAMPLE, true);
-  loadingEl.remove();
+  // Chargement d'un projet publié à côté de la page : #traditionnel → chalet_traditionnel.json
+  function loadFromHash() {
+    const h = (location.hash || '').slice(1);
+    if (!/^[a-z0-9_-]+$/i.test(h)) { load(SAMPLE, true); return; }
+    loadingEl.textContent = 'Chargement du projet…';
+    fetch(`chalet_${h}.json`).then(r => r.ok ? r.json() : Promise.reject(new Error(r.status)))
+      .then(d => { load(d, true); loadingEl.hidden = true; })
+      .catch(() => { load(SAMPLE, true); loadingEl.hidden = true; });
+  }
+  window.addEventListener('hashchange', loadFromHash);
+  loadFromHash();
+  if (!location.hash) loadingEl.hidden = true;
   const clock = new THREE.Clock();
   (function frame() {
     requestAnimationFrame(frame);

@@ -1,0 +1,329 @@
+<title>Chalet R+1 Montagne</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Mise en page : dossier de projet d'architecte — bandeau de variante collant, grand rendu, puis plans, fichiers et preuves */
+:root{
+  --bg:#f2f3f1; --surface:#ffffff; --fg:#1a2127; --muted:#5b6670; --line:#d8dddd; --chip:#e8ecea;
+  --accent:#9a3324; --accent-fg:#ffffff; --pine:#2f4a3a; --ok:#2e6b45;
+  --f-display:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101519; --surface:#172026; --fg:#e5e9eb; --muted:#9ba7b0; --line:#28323a; --chip:#1f2a31;
+  --accent:#e2806a; --accent-fg:#1a0f0c; --pine:#93b8a1; --ok:#7fc79a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101519; --surface:#172026; --fg:#e5e9eb; --muted:#9ba7b0; --line:#28323a; --chip:#1f2a31;
+  --accent:#e2806a; --accent-fg:#1a0f0c; --pine:#93b8a1; --ok:#7fc79a; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+header.top{padding-block:28px 18px}
+.eyebrow{font:500 12px/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+h1{font:700 clamp(28px,4.4vw,44px)/1.05 var(--f-display);margin:0 0 10px;text-wrap:balance;letter-spacing:-.01em}
+.lede{max-width:68ch;color:var(--muted);margin:0}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:16px;font-family:var(--f-mono);font-size:13px}
+.facts b{font-weight:500;color:var(--fg)} .facts span{color:var(--muted)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-block:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:10px}
+.seg{display:inline-grid;grid-auto-flow:column;gap:4px;background:var(--chip);border-radius:9px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--fg);font:600 14px var(--f-body);padding:8px 14px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.bar nav{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px}
+.bar nav a{color:var(--muted);text-decoration:none} .bar nav a:hover{color:var(--fg)}
+section{padding-block:34px;border-bottom:1px solid var(--line)}
+h2{font:600 24px/1.15 var(--f-display);margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 18px;max-width:72ch}
+.hero{display:grid;gap:10px}
+.hero figure{margin:0;position:relative;background:var(--chip);border-radius:8px;overflow:hidden;aspect-ratio:16/9;max-width:100%}
+.hero figure img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{position:absolute;left:12px;bottom:12px;background:rgba(15,20,24,.72);color:#f4f6f7;font:500 12px var(--f-mono);padding:5px 9px;border-radius:5px}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.thumbs button{padding:0;border:2px solid transparent;border-radius:7px;overflow:hidden;cursor:pointer;background:var(--chip);aspect-ratio:16/9}
+.thumbs button[aria-pressed="true"]{border-color:var(--accent)}
+.thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.thumbs span{display:block}
+.vlabel{font:500 12px var(--f-mono);color:var(--muted);margin-top:4px;text-align:left}
+.two{display:grid;grid-template-columns:1.25fr 1fr;gap:26px;align-items:start}
+.two > *{min-width:0}
+.style-note h3{font:600 17px var(--f-display);margin:0 0 6px;color:var(--accent)}
+.style-note p{margin:0 0 10px}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sw{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.sw i{width:18px;height:18px;border-radius:4px;border:1px solid var(--line);display:inline-block}
+.viewer{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--chip);aspect-ratio:16/9;max-width:100%}
+.viewer iframe{width:100%;height:100%;border:0;display:block}
+.plan img{width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff;display:block}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sum td{font-weight:600;border-bottom:2px solid var(--fg)}
+.scroll{overflow-x:auto}
+code,.mono{font-family:var(--f-mono);font-size:13px}
+.path{font-family:var(--f-mono);font-size:12.5px;background:var(--chip);padding:2px 6px;border-radius:4px;word-break:break-all}
+.steps{display:grid;gap:22px}
+.step{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.step h3{font:600 18px var(--f-display);margin:0 0 4px}
+.step .tag{display:inline-block;font:500 11px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ok);border:1px solid currentColor;border-radius:999px;padding:2px 8px;margin-bottom:8px}
+.step ul{margin:8px 0 0;padding-left:18px} .step li{margin:3px 0}
+.step img{width:100%;height:auto;border-radius:6px;border:1px solid var(--line);background:#fff;display:block}
+.howto{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.howto div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.howto h3{font:600 16px var(--f-display);margin:0 0 6px}
+.howto ol{margin:0;padding-left:18px;font-size:14px} .howto li{margin:4px 0}
+.limits li{margin:6px 0;max-width:80ch}
+footer{padding-block:26px;color:var(--muted);font-size:13px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:860px){.two,.step{grid-template-columns:1fr}.howto{grid-template-columns:1fr}.thumbs{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<header class="top wrap">
+  <p class="eyebrow">Projet d'exemple · plans → IFC → Blender → rendus</p>
+  <h1>Chalet R+1 à la montagne, en deux variantes</h1>
+  <p class="lede">Une maison de 126,57 m² habitables conçue de zéro : plans cotés, maquette IFC ouvrable dans Revit, scène Blender complète avec son paysage alpin, et rendus calculés. Le plan est le même pour les deux variantes, seule l'architecture des façades change.</p>
+  <div class="facts">
+    <span><b>126,57 m²</b> habitables</span>
+    <span><b>2</b> niveaux · HSP 2,50 m</span>
+    <span><b>3</b> chambres · séjour 46 m²</span>
+    <span>Toiture <b>zinc</b> 2 pans 30°</span>
+    <span>Site <b>~1 400 m</b>, façade plein sud</span>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Variante">
+      <button id="vA" data-v="traditionnel" aria-pressed="true">A · Traditionnelle</button>
+      <button id="vB" data-v="contemporain" aria-pressed="false">B · Contemporaine</button>
+    </div>
+    <nav aria-label="Sections">
+      <a href="#rendus-sec">Rendus</a><a href="#visite-sec">Visite 3D</a><a href="#plans-sec">Plans</a><a href="#fichiers-sec">Fichiers</a><a href="#preuves-sec">Preuves</a>
+    </nav>
+  </div>
+</div>
+
+<main>
+<section id="rendus-sec">
+  <div class="wrap">
+    <h2>Rendus</h2>
+    <p class="sub">Calculés avec Blender Cycles (lumière physique, ciel atmosphérique, 1600 × 900 px). Le relief, la forêt et les sommets sont générés dans la scène, ce n'est pas une photo de fond.</p>
+    <div class="hero">
+      <figure><img id="heroImg" alt="Rendu de la façade sud" src="img/rendu_traditionnel_sud.jpg"><span class="cap" id="heroCap">Façade sud · balcon et vallée</span></figure>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <div class="two" style="margin-top:22px">
+      <div class="style-note" id="styleNote"></div>
+      <div>
+        <p class="eyebrow" style="margin-bottom:6px">Matériaux de façade</p>
+        <div class="swatches" id="swatches"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="visite-sec">
+  <div class="wrap">
+    <h2>Visite 3D</h2>
+    <p class="sub">Maquette navigable générée depuis le même JSON. « Visite à pied » pour entrer par la porte nord et monter à l'étage ; « Plan RDC / R+1 » pour couper à 1,20 m. Cette vue web est simplifiée : la version détaillée est la scène Blender.</p>
+    <div class="viewer"><iframe id="viewerFrame" title="Maquette 3D navigable" src="visite.html#traditionnel" loading="lazy" allow="fullscreen"></iframe></div>
+  </div>
+</section>
+
+<section id="plans-sec">
+  <div class="wrap">
+    <h2>Plans et surfaces</h2>
+    <p class="sub">Plans cotés du rez-de-chaussée et de l'étage, coupe transversale, tableau des surfaces. Surfaces mesurées au nu intérieur des murs, hors cloisons, escalier et trémie.</p>
+    <div class="two">
+      <div class="plan"><img id="planImg" src="img/plans_traditionnel.png" alt="Plans cotés et coupe"></div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Pièce</th><th class="num">Surface</th></tr></thead>
+          <tbody>
+            <tr><td colspan="2"><b>Rez-de-chaussée</b></td></tr>
+            <tr><td>Séjour – cuisine</td><td class="num">46,21 m²</td></tr>
+            <tr><td>Entrée</td><td class="num">7,92 m²</td></tr>
+            <tr><td>Buanderie – local skis</td><td class="num">7,40 m²</td></tr>
+            <tr><td>WC</td><td class="num">2,36 m²</td></tr>
+            <tr><td colspan="2"><b>Étage</b></td></tr>
+            <tr><td>Chambre 1 (parents)</td><td class="num">13,87 m²</td></tr>
+            <tr><td>Chambre 2</td><td class="num">12,95 m²</td></tr>
+            <tr><td>Chambre 3</td><td class="num">12,39 m²</td></tr>
+            <tr><td>Salle de bain</td><td class="num">8,71 m²</td></tr>
+            <tr><td>WC</td><td class="num">1,50 m²</td></tr>
+            <tr><td>Palier</td><td class="num">13,25 m²</td></tr>
+            <tr class="sum"><td>Total habitable</td><td class="num">126,57 m²</td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="margin-top:12px">Murs extérieurs 40 cm (parement 4 + isolant 16 + béton 18 + finition 2), cloisons 10 cm, dalles 25 cm, escalier droit de 16 marches (17,2 × 26 cm), débords de toit 0,90 m en égout et 1,20 m en pignon pour protéger le balcon de la neige.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fichiers-sec">
+  <div class="wrap">
+    <h2>Fichiers à ouvrir et modifier</h2>
+    <p class="sub">Tous les fichiers sont dans le dépôt GitHub <span class="path">Zelakow/Mod-lisation-3D</span>, branche <span class="path">claude/revit-3d-modeling-w6f42s</span>, dossier <span class="path">maison/out/</span>. Remplacez <i>traditionnel</i> par <i>contemporain</i> pour la variante B.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Fichier</th><th>Pour</th><th>Ce que vous pouvez y faire</th><th class="num">Taille A</th></tr></thead>
+        <tbody>
+          <tr><td><span class="path">chalet_traditionnel.ifc</span></td><td>Revit, Archicad, Bonsai, FreeCAD</td><td>Objets métier par niveau : 20 murs (composition 4 couches), 19 à 20 fenêtres, 8 portes, dalles avec trémie, toiture, escalier, garde-corps, 10 pièces avec leur surface, mobilier.</td><td class="num">303 Ko</td></tr>
+          <tr><td><span class="path">chalet_traditionnel.blend</span></td><td>Blender (gratuit)</td><td>La scène complète des rendus : bâtiment détaillé, matériaux, relief, forêt, ciel, soleil et 4 caméras. Objets rangés par collections (RDC, R+1, Toiture, Menuiseries, Détails de façade, Mobilier, Site).</td><td class="num">9,3 Mo</td></tr>
+          <tr><td><span class="path">chalet_traditionnel.glb</span></td><td>Twinmotion, D5, SketchUp, Blender</td><td>Le bâtiment seul en maillage, prêt à être habillé avec les bibliothèques de ces logiciels (végétation, personnages, véhicules).</td><td class="num">5,5 Mo</td></tr>
+          <tr><td><span class="path">chalet_traditionnel.json</span></td><td>Régénérer le projet</td><td>La source unique : murs, ouvertures, niveaux, matériaux. Les scripts du dossier <span class="path">maison/</span> refont plans, IFC, scène et rendus à partir de ce fichier.</td><td class="num">17 Ko</td></tr>
+          <tr><td><span class="path">plans_traditionnel.svg</span></td><td>Illustrator, Inkscape, AutoCAD (via import)</td><td>Plans et coupe en vectoriel.</td><td class="num">238 Ko</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="howto">
+      <div>
+        <h3>Dans Revit</h3>
+        <ol>
+          <li>Fichier › Ouvrir › IFC, puis choisir le fichier .ifc.</li>
+          <li>Les murs, dalles, portes et fenêtres arrivent dans leurs catégories, rangés par niveau (RDC à 0,00, Étage à +2,75).</li>
+          <li>Toiture, escalier et mobilier sont importés comme formes fixes : vous pouvez les déplacer ou les supprimer, mais pas changer leurs paramètres. Pour les modifier, redessinez-les avec les outils Revit en vous calant dessus.</li>
+          <li>Alternative : Insérer › Lier IFC, pour garder le fichier en référence et modéliser par-dessus.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Dans Blender</h3>
+        <ol>
+          <li>Ouvrir le .blend directement.</li>
+          <li>Choisir une caméra dans la collection « Caméras et lumières », puis F12 pour calculer le rendu.</li>
+          <li>Modifier un mur : chaque mur porte ses menuiseries et ses volets, qui suivent quand on le déplace.</li>
+          <li>Changer l'heure : faire pivoter l'objet « Soleil ».</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Pour un rendu « promoteur »</h3>
+        <ol>
+          <li>Ouvrir l'IFC dans Revit, puis envoyer la maquette vers Twinmotion ou D5 Render avec leur module Revit. Vous pouvez aussi importer le .glb directement si votre version le prend en charge.</li>
+          <li>Ajouter végétation, personnages et voitures depuis leurs bibliothèques.</li>
+          <li>Régler soleil, saison et neige, puis exporter images et vidéo.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="preuves-sec">
+  <div class="wrap">
+    <h2>Preuves, étape par étape</h2>
+    <p class="sub">Chaque étape a été contrôlée par un outil indépendant de celui qui l'a produite.</p>
+    <div class="steps">
+      <article class="step">
+        <div>
+          <span class="tag">Étape 1 · vérifié</span>
+          <h3>Plan et programme</h3>
+          <p>Le programme est écrit en données (murs par leur axe, pièces par leur contour intérieur). Les surfaces sont calculées sur les polygones, pas saisies à la main.</p>
+          <ul>
+            <li>Total 126,57 m² pour 125 m² demandés (RDC 63,90, étage 62,67).</li>
+            <li>Plans dessinés automatiquement à partir des mêmes données que l'IFC et la scène 3D.</li>
+            <li>Corrigé pendant le contrôle : porte d'entrée qui s'ouvrait vers l'extérieur, coupe refaite en transversale pour montrer la pente du toit.</li>
+          </ul>
+        </div>
+        <img data-v-src="img/plans_{v}.png" src="img/plans_traditionnel.png" alt="Plans générés à l'étape 1" loading="lazy">
+      </article>
+      <article class="step">
+        <div>
+          <span class="tag">Étape 2 · vérifié</span>
+          <h3>Maquette IFC pour Revit</h3>
+          <p>Fichier relu par IfcOpenShell après écriture, puis validé contre le schéma IFC4. L'image ci-contre est la géométrie recalculée depuis le fichier, pas depuis le générateur.</p>
+          <ul>
+            <li>0 erreur de validation IFC4 sur les deux fichiers.</li>
+            <li>Rez-de-chaussée : 8 murs, 10 fenêtres (9 en B), 3 portes, 4 dalles, escalier, 4 pièces.</li>
+            <li>Étage : 12 murs dont 2 pignons, 10 fenêtres, 5 portes, 5 dalles, toiture, garde-corps, 6 pièces.</li>
+            <li>Somme des surfaces des pièces relue dans l'IFC : 126,56 m².</li>
+            <li>Corrigé pendant le contrôle : la composition en 4 couches n'était pas rattachée aux murs.</li>
+          </ul>
+        </div>
+        <img data-v-src="img/preuve_ifc_{v}.png" src="img/preuve_ifc_traditionnel.png" alt="Géométrie relue depuis l'IFC" loading="lazy">
+      </article>
+      <article class="step">
+        <div>
+          <span class="tag">Étape 3 · vérifié</span>
+          <h3>Scène Blender et rendus</h3>
+          <p>Blender 5.2 LTS piloté par script : bâtiment détaillé (volets, lambrequins, ferme de pignon, barres à neige, gouttières, appuis, poêle et conduit), relief alpin sur 16 km, environ 9 000 épicéas, 90 000 touffes d'herbe, ciel atmosphérique.</p>
+          <ul>
+            <li>Aperçus rapides avant chaque rendu final, corrigés au fil de l'eau : sapins trop stylisés puis couchés, herbe en traits verticaux, montagnes facettées, poêle blanc, veinage de table en diagonale.</li>
+            <li>Rendus finaux : 4 vues par variante, en 1600 × 900.</li>
+            <li id="renderTimes">Temps de calcul : voir le journal dans le dépôt.</li>
+          </ul>
+        </div>
+        <img data-v-src="img/rendu_{v}_aerienne.jpg" src="img/rendu_traditionnel_aerienne.jpg" alt="Vue aérienne du site" loading="lazy">
+      </article>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap limits">
+    <h2>Limites à connaître</h2>
+    <ul>
+      <li>Projet fictif d'exemple : ni étude thermique (RE2020), ni structure, ni accessibilité, ni règle d'urbanisme n'ont été vérifiées.</li>
+      <li>Dans Revit, l'IFC donne de vrais murs, dalles et menuiseries par niveau, mais ce ne sont pas des familles Revit natives aussi souples que des objets dessinés dans Revit. Toiture, escalier et mobilier arrivent comme formes fixes.</li>
+      <li>Les rendus montrent un bâtiment et un paysage réalistes, mais sans personnages ni voitures : c'est le rôle des bibliothèques de Twinmotion ou D5.</li>
+      <li>La visite 3D web est une version allégée. Les détails (volets, lambrequins, forêt) ne sont que dans la scène Blender et les rendus.</li>
+    </ul>
+  </div>
+</section>
+</main>
+<footer class="wrap">Généré par script depuis <span class="path">maison/projet.py</span> · plans, IFC, scène Blender et rendus partagent la même source.</footer>
+
+<script>
+(function(){
+  const V = {
+    traditionnel: {
+      nom: "Variante A — Traditionnelle",
+      texte: "Inspirée des maisons à pignon décoré : socle en enduit blanc sur soubassement de pierre, étage et pignon en bardage bois peint rouge oxyde, lambrequins blancs découpés en rive, ferme de pignon apparente avec œil-de-bœuf, volets battants vert sapin, balcon à balustres sur jambes de force, petits bois aux fenêtres.",
+      toit: "Zinc naturel à joints debout, barres à neige.",
+      sw: [["#efebe3","Enduit"],["#8f2f24","Bardage peint"],["#f6f4ef","Lambrequins, balcon"],["#2f4a3a","Volets"],["#a9adb0","Zinc naturel"],["#8d8a84","Pierre"]]
+    },
+    contemporain: {
+      nom: "Variante B — Contemporaine",
+      texte: "Lecture actuelle du chalet : socle en pierre de montagne, étage en mélèze grisé, grande baie de 6,40 m sur le séjour, menuiseries alu anthracite sans petits bois, garde-corps verre sur poteaux acier, rives en zinc, souche de cheminée en acier noir.",
+      toit: "Zinc anthracite à joints debout, barres à neige.",
+      sw: [["#7f7c76","Pierre"],["#8a8178","Mélèze grisé"],["#2e3236","Alu anthracite"],["#45494d","Zinc anthracite"],["#7e756b","Bois du balcon"]]
+    }
+  };
+  const VIEWS = [["sud","Façade sud · balcon et vallée"],["aerienne","Vue aérienne · le chalet dans son site"],["nord","Entrée nord-est · tas de bois"],["interieur","Séjour · vue sur la vallée"]];
+  let cur = "traditionnel", view = "sud";
+  const $ = id => document.getElementById(id);
+  function render(){
+    const d = V[cur];
+    $("heroImg").src = `img/rendu_${cur}_${view}.jpg`;
+    $("heroImg").alt = `Rendu ${d.nom}, ${VIEWS.find(x=>x[0]===view)[1]}`;
+    $("heroCap").textContent = VIEWS.find(x=>x[0]===view)[1];
+    const th = $("thumbs"); th.innerHTML = "";
+    for (const [k,lab] of VIEWS){
+      const b = document.createElement("button"); b.setAttribute("aria-pressed", String(k===view)); b.title = lab;
+      b.innerHTML = `<img alt="" loading="lazy" src="img/rendu_${cur}_${k}.jpg">`;
+      b.onclick = () => { view = k; render(); };
+      const wrap = document.createElement("div"); wrap.appendChild(b);
+      const l = document.createElement("div"); l.className = "vlabel"; l.textContent = lab.split(" · ")[0]; wrap.appendChild(l);
+      th.appendChild(wrap);
+    }
+    $("styleNote").innerHTML = "";
+    const h = document.createElement("h3"); h.textContent = d.nom;
+    const p = document.createElement("p"); p.textContent = d.texte;
+    const p2 = document.createElement("p"); p2.textContent = "Toiture : " + d.toit;
+    $("styleNote").append(h,p,p2);
+    $("swatches").innerHTML = d.sw.map(([c,l]) => `<span class="sw"><i style="background:${c}"></i>${l}</span>`).join("");
+    $("planImg").src = `img/plans_${cur}.png`;
+    document.querySelectorAll("[data-v-src]").forEach(im => im.src = im.dataset.vSrc.replace("{v}", cur));
+    const fr = $("viewerFrame"); const want = `visite.html#${cur}`; if (!fr.src.endsWith(want)) fr.src = want;
+    $("vA").setAttribute("aria-pressed", String(cur==="traditionnel"));
+    $("vB").setAttribute("aria-pressed", String(cur==="contemporain"));
+  }
+  function fromHash(){ const h = location.hash.slice(1); if (V[h]) { cur = h; render(); } }
+  for (const b of document.querySelectorAll(".seg button")) b.onclick = () => { cur = b.dataset.v; try { history.replaceState(null, "", "#" + cur); } catch(_) {} render(); };
+  window.addEventListener("hashchange", fromHash);
+  render(); fromHash();
+})();
+</script>
