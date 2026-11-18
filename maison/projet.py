@@ -82,7 +82,7 @@ STYLES = {
             mur_rdc=dict(type="enduit", couleur="#efebe3"),
             mur_r1=dict(type="bois", couleur="#8f2f24", echelle=1.0),
             interieur=dict(type="peinture", couleur="#f3f1ec"),
-            zinc=dict(type="zinc", couleur="#a9adb0"),
+            zinc=dict(type="zinc", couleur="#8e9396"),
             menuiserie=dict(type="peinture", couleur="#f4f2ee"),
             volet=dict(type="bois", couleur="#2f4a3a", echelle=0.8),
             lambrequin=dict(type="peinture", couleur="#f6f4ef"),

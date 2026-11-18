@@ -91,6 +91,17 @@ class N:
 
 MATS = {}
 
+def grime(n, color, strength=1.0):
+    """Assombrit les recoins (occlusion ambiante) et le pied des murs (éclaboussures)."""
+    ao = n.n("ShaderNodeAmbientOcclusion", i_Distance=0.35); ao.samples = 8
+    g, sep = n.pos()
+    foot = n.n("ShaderNodeMapRange", i_From__Min=0.9, i_From__Max=-0.1, i_To__Min=0.0, i_To__Max=0.35 * strength)
+    n.l(sep.outputs[2], foot.inputs[0])
+    nz = n.n("ShaderNodeTexNoise", i_Scale=3.0, i_Detail=6); n.l(g.outputs["Position"], nz.inputs["Vector"])
+    f_ao = n.math("MULTIPLY", n.math("SUBTRACT", None, ao.outputs["AO"], va=1.0), None, vb=0.55 * strength)
+    f = n.math("MINIMUM", n.math("ADD", f_ao, n.math("MULTIPLY", foot.outputs[0], nz.outputs["Fac"])), None, vb=0.7)
+    return n.mix(f, color, (0.05, 0.045, 0.035, 1))
+
 def mat_planks(name, d, axis="xy", width=None, vertical=True):
     m, nt, b, _ = new_mat(name); n = N(nt)
     w = width or {"bois": 0.13}.get(d["type"], 0.13) * d.get("echelle", 1.0)
@@ -107,7 +118,9 @@ def mat_planks(name, d, axis="xy", width=None, vertical=True):
     grain = n.n("ShaderNodeTexNoise", i_Scale=1.0, i_Detail=6.0, i_Roughness=0.6); n.l(mp.outputs[0], grain.inputs["Vector"])
     c2 = n.mix(n.math("MULTIPLY", grain.outputs["Fac"], None, vb=0.35), c, hexc(d["couleur"], 0.6))
     c3 = n.mix(n.math("MULTIPLY", groove, None, vb=0.85), c2, (0.02, 0.015, 0.01, 1))
-    n.l(c3, b.inputs["Base Color"]); b.inputs["Roughness"].default_value = 0.72
+    if axis == "xy": c3 = grime(n, c3, 0.8)
+    n.l(c3, b.inputs["Base Color"])
+    rr = n.math("ADD", n.math("MULTIPLY", wn.outputs["Value"], None, vb=0.2), None, vb=0.62); n.l(rr, b.inputs["Roughness"])
     h = n.math("SUBTRACT", n.math("MULTIPLY", grain.outputs["Fac"], None, vb=0.15), groove)
     n.bump(b, h, 0.35, 0.006)
     return m
@@ -117,7 +130,8 @@ def mat_enduit(name, d, rough=0.92, scale=60, strength=0.12):
     g, sep = n.pos()
     nz = n.n("ShaderNodeTexNoise", i_Scale=scale, i_Detail=8.0); n.l(g.outputs["Position"], nz.inputs["Vector"])
     big = n.n("ShaderNodeTexNoise", i_Scale=0.8, i_Detail=3.0); n.l(g.outputs["Position"], big.inputs["Vector"])
-    c = n.mix(n.math("MULTIPLY", big.outputs["Fac"], None, vb=0.5), hexc(d["couleur"], 1.03), hexc(d["couleur"], 0.9))
+    c = n.mix(n.math("MULTIPLY", big.outputs["Fac"], None, vb=0.5), hexc(d["couleur"], 1.03), hexc(d["couleur"], 0.88))
+    if scale <= 60: c = grime(n, c, 1.0)
     n.l(c, b.inputs["Base Color"]); b.inputs["Roughness"].default_value = rough
     n.bump(b, nz.outputs["Fac"], strength, 0.004)
     return m
@@ -134,6 +148,7 @@ def mat_pierre(name, d):
     stone = n.mix(0.72, sat.outputs[0], hexc(d["couleur"]))
     stone = n.mix(n.math("MULTIPLY", nz.outputs["Fac"], None, vb=0.4), stone, hexc(d["couleur"], 0.65))
     c = n.mix(joint, stone, (0.33, 0.32, 0.30, 1))
+    c = grime(n, c, 0.7)
     n.l(c, b.inputs["Base Color"]); b.inputs["Roughness"].default_value = 0.88
     h = n.math("ADD", n.math("MULTIPLY", vo.outputs["Distance"], None, vb=2.0), n.math("MULTIPLY", nz.outputs["Fac"], None, vb=0.3))
     n.bump(b, n.math("MINIMUM", h, None, vb=0.3), 0.7, 0.03)
@@ -149,6 +164,9 @@ def mat_zinc(name, d):
     nz = n.n("ShaderNodeTexNoise", i_Scale=6, i_Detail=4); n.l(g.outputs["Position"], nz.inputs["Vector"])
     c = n.mix(n.math("MULTIPLY", wn.outputs["Value"], None, vb=0.25), hexc(d["couleur"]), hexc(d["couleur"], 1.2))
     c = n.mix(seam, c, hexc(d["couleur"], 1.25))
+    streak = n.n("ShaderNodeTexNoise", i_Scale=1.5, i_Detail=8); mps = n.n("ShaderNodeMapping"); mps.inputs["Scale"].default_value = (8, 0.6, 8)
+    n.l(g.outputs["Position"], mps.inputs["Vector"]); n.l(mps.outputs[0], streak.inputs["Vector"])
+    c = n.mix(n.math("MULTIPLY", streak.outputs["Fac"], None, vb=0.35), c, hexc(d["couleur"], 0.7))
     n.l(c, b.inputs["Base Color"]); b.inputs["Metallic"].default_value = 0.75
     r = n.math("ADD", n.math("MULTIPLY", nz.outputs["Fac"], None, vb=0.15), None, vb=0.3); n.l(r, b.inputs["Roughness"])
     n.bump(b, seam, 0.6, 0.02)
@@ -588,6 +606,21 @@ for f in D["mobilier"]:
     ob = mb.obj(f.get("nom") or {"lit": "Lit", "canape": "Canapé", "table": "Table"}.get(t_, "Meuble"), mats_, C_MOB, bevel=0.012)
     place(ob, (f["position"][0], f["position"][1], lv["altitude"]), -rot if False else rot)
     if f.get("rotation", 0) == 180: ob.rotation_euler[2] = math.pi
+# poutres apparentes au plafond du séjour
+mb = MB()
+for xb in np.arange(0.9, 7.6, 1.3): mb.box(xb - 0.08, xb + 0.08, 0.2, 5.55, A1 - 0.25 - 0.22, A1 - 0.25, 0)
+mb.obj("Poutres apparentes séjour", [mat("chene")], C_MOB, bevel=0.01)
+# rideaux de lin de part et d'autre des baies sud
+M_RID = mat_simple("Lin des rideaux", (0.78, 0.74, 0.66, 1), 1.0, 0, 0.6)
+for xr in ((0.35, 0.75), (7.15, 7.55)) if not TRAD else ((0.45, 0.85), (6.95, 7.4)):
+    bm_ = bmesh.new()
+    xs_ = np.linspace(xr[0], xr[1], 24); V_ = []
+    for i_, x_ in enumerate(xs_):
+        yy = 0.28 + 0.04 * math.sin(i_ * 1.3)
+        V_ += [(x_, yy, 0.02), (x_, yy, 2.4)]
+    F_ = [(2 * i_, 2 * i_ + 2, 2 * i_ + 3, 2 * i_ + 1) for i_ in range(len(xs_) - 1)]
+    o_ = mesh_obj("Rideau", V_, F_, [M_RID], None, C_MOB, smooth=True)
+    sol = o_.modifiers.new("Épaisseur", "SOLIDIFY"); sol.thickness = 0.01
 # tapis + suspensions + poêle (conduit)
 mb = MB(); mb.box(0.8, 4.0, 1.0, 3.6, 0.0, 0.012, 0); mb.obj("Tapis", [mat_simple("laine", (0.42, 0.36, 0.3, 1), 1.0, 0, 0.5)], C_MOB)
 cylinder("Conduit du poêle", (5.2, 1.0, 1.1), (5.2, 1.0, A1 - 0.25), 0.08, M_ACIER, C_MOB)
@@ -639,7 +672,10 @@ def height(x, y):
     hills = (fbm(x / 260, y / 260, 6, 3) - 0.5) * 90 * smooth(30, 300, r) + (fbm(x / 70, y / 70, 4, 5) - 0.5) * 8 * smooth(25, 90, r)
     ry = np.where(dy < 0, dy / 1.9, dy)                            # vallée plus large au sud
     re = np.sqrt(dx * dx + ry * ry)
-    mount = ridged(x / 2600 + 3.1, y / 2600 + 1.7) ** 1.6 * 2200 * smooth(700, 3400, re)
+    wx = x + 1400 * (fbm(x / 3500, y / 3500, 4, 41) - 0.5); wy = y + 1400 * (fbm(x / 3500 + 9, y / 3500 + 4, 4, 43) - 0.5)
+    north = np.clip(dy / (re + 1e-6), -1, 1)
+    mount = ridged(wx / 2600 + 3.1, wy / 2600 + 1.7, 10) ** 1.7 * 2400 * (0.5 + 0.5 * np.clip(north + 0.3, 0, 1)) * smooth(1000, 4200, re)
+    mount += (fbm(wx / 180, wy / 180, 5, 51) - 0.5) * 60 * smooth(900, 3000, re)
     near = (fbm(x / 40, y / 40, 4, 9) - 0.5) * 1.2
     h = slope + hills + mount + near * smooth(18, 60, r)
     plat = -0.15 + 0.012 * dy
@@ -669,28 +705,32 @@ def mat_terrain():
     noise = n.n("ShaderNodeTexNoise", i_Scale=0.02, i_Detail=8); n.l(g.outputs["Position"], noise.inputs["Vector"])
     fine = n.n("ShaderNodeTexNoise", i_Scale=1.5, i_Detail=10); n.l(g.outputs["Position"], fine.inputs["Vector"])
     patch = n.n("ShaderNodeTexNoise", i_Scale=0.004, i_Detail=4); n.l(g.outputs["Position"], patch.inputs["Vector"])
-    grass = n.mix(fine.outputs["Fac"], (0.045, 0.10, 0.012, 1), (0.16, 0.20, 0.035, 1))
+    grass = n.mix(fine.outputs["Fac"], (0.04, 0.07, 0.015, 1), (0.14, 0.17, 0.04, 1))
     grass = n.mix(n.math("MULTIPLY", noise.outputs["Fac"], None, vb=0.45), grass, (0.22, 0.19, 0.07, 1))
-    forest = n.mix(fine.outputs["Fac"], (0.012, 0.03, 0.012, 1), (0.03, 0.06, 0.025, 1))
+    canopy = n.n("ShaderNodeTexVoronoi", i_Scale=0.12); n.l(g.outputs["Position"], canopy.inputs["Vector"])
+    forest = n.mix(canopy.outputs["Distance"], (0.03, 0.05, 0.02, 1), (0.006, 0.016, 0.007, 1))
     fmask = n.math("MULTIPLY", n.math("GREATER_THAN", patch.outputs["Fac"], None, vb=0.5),
                    n.math("LESS_THAN", z, None, vb=650))
     fmask = n.math("MULTIPLY", fmask, n.math("GREATER_THAN", sep.outputs[1], None, vb=300.0))  # forêts lointaines (pas au premier plan)
     c = n.mix(fmask, grass, forest)
-    rock = n.mix(fine.outputs["Fac"], (0.09, 0.085, 0.08, 1), (0.24, 0.22, 0.2, 1))
+    strata = n.n("ShaderNodeTexWave", wave_type="BANDS", bands_direction="Z", i_Scale=0.012, i_Distortion=14.0, i_Detail=8.0); n.l(g.outputs["Position"], strata.inputs["Vector"])
+    rock = n.mix(fine.outputs["Fac"], (0.075, 0.07, 0.065, 1), (0.22, 0.2, 0.18, 1))
+    rock = n.mix(n.math("MULTIPLY", strata.outputs["Fac"], None, vb=0.18), rock, (0.3, 0.28, 0.25, 1))
     steep = n.math("SUBTRACT", None, nz_, va=1.0)
     rmask = n.math("ADD", n.math("MULTIPLY", n.math("GREATER_THAN", steep, None, vb=0.28), None, vb=1.0),
                    n.math("GREATER_THAN", z, None, vb=1100))
     c = n.mix(n.math("MINIMUM", rmask, None, vb=1.0), c, rock)
-    snowline = n.math("ADD", n.math("MULTIPLY", noise.outputs["Fac"], None, vb=600), None, vb=1350)
-    smask = n.math("MULTIPLY", n.math("GREATER_THAN", z, snowline), n.math("GREATER_THAN", nz_, None, vb=0.55))
+    snowline = n.math("ADD", n.math("MULTIPLY", noise.outputs["Fac"], None, vb=500), None, vb=850)
+    smask = n.math("MULTIPLY", n.math("GREATER_THAN", z, snowline), n.math("GREATER_THAN", nz_, None, vb=0.42))
     c = n.mix(smask, c, (0.85, 0.88, 0.92, 1))
     # perspective atmosphérique
     cam = n.n("ShaderNodeCameraData")
-    haze = n.n("ShaderNodeMapRange", i_From__Min=600.0, i_From__Max=16000.0, i_To__Min=0.0, i_To__Max=0.6)
+    haze = n.n("ShaderNodeMapRange", interpolation_type="SMOOTHERSTEP", i_From__Min=400.0, i_From__Max=16000.0, i_To__Min=0.0, i_To__Max=0.55)
     n.l(cam.outputs["View Distance"], haze.inputs[0])
     n.l(c, b.inputs["Base Color"]); b.inputs["Roughness"].default_value = 0.95
-    n.bump(b, fine.outputs["Fac"], 0.6, 0.08)
-    em = n.n("ShaderNodeEmission", i_Strength=1.0); em.inputs["Color"].default_value = (0.42, 0.55, 0.75, 1)
+    far_n = n.n("ShaderNodeTexNoise", i_Scale=0.03, i_Detail=12, i_Roughness=0.7); n.l(g.outputs["Position"], far_n.inputs["Vector"])
+    n.bump(b, n.math("ADD", fine.outputs["Fac"], n.math("MULTIPLY", far_n.outputs["Fac"], None, vb=3.0)), 0.8, 0.5)
+    em = n.n("ShaderNodeEmission", i_Strength=1.0); em.inputs["Color"].default_value = (0.36, 0.48, 0.68, 1)
     mx = n.n("ShaderNodeMixShader"); n.l(haze.outputs[0], mx.inputs[0]); n.l(b.outputs[0], mx.inputs[1]); n.l(em.outputs[0], mx.inputs[2])
     n.l(mx.outputs[0], out.inputs[0])
     return m
@@ -699,7 +739,7 @@ M_TER = mat_terrain()
 near_xs = np.linspace(CX - 600, CX + 600, 241); near_ys = np.linspace(CY - 600, CY + 600, 241)
 near, NX, NY, NZ = grid_mesh("Terrain proche (1,2 km)", near_xs, near_ys, C_TER)
 near.data.materials.append(M_TER)
-u = np.linspace(-1, 1, 461); far_c = np.sign(u) * np.abs(u) ** 1.9 * 16000
+u = np.linspace(-1, 1, 621); far_c = np.sign(u) * np.abs(u) ** 1.75 * 16000
 far, *_ = grid_mesh("Montagnes (14 km)", far_c + CX, far_c + CY, C_TER, hole=598)
 far.data.materials.append(M_TER)
 # petite zone fine autour de la maison (herbe rase) : subdivision locale
@@ -759,18 +799,21 @@ w_ = w_ * view
 vg = near.vertex_groups.new(name="densité forêt")
 for i, val in enumerate(w_.ravel()):
     if val > 0.01: vg.add([i], float(val), "REPLACE")
-psm = near.modifiers.new("Forêt de sapins", "PARTICLE_SYSTEM")
-ps = psm.particle_system; s_ = ps.settings
-s_.type = "HAIR"; s_.count = 900 if PREVIEW else 9000; s_.emit_from = "FACE"; s_.distribution = "RAND"; s_.use_advanced_hair = True
-s_.render_type = "COLLECTION"
 cpine = coll("Sapins", C_LIB)
 for p_ in pines:
     C_LIB.objects.unlink(p_); cpine.objects.link(p_); p_.location = (0, 0, 0)
-s_.instance_collection = cpine; s_.use_collection_pick_random = True
-s_.particle_size = 14.0; s_.size_random = 0.6
-s_.use_rotations = False
-s_.hair_length = 1.0
-ps.vertex_group_density = "densité forêt"; ps.seed = 3
+C_FOR = coll("Forêt", C_VEG)
+wflat = w_.ravel(); xs_f, ys_f = NX.ravel(), NY.ravel()
+cand = np.nonzero(wflat > 0.05)[0]
+ntree = 1500 if PREVIEW else 7000
+pick = rng.choice(cand, size=min(ntree, len(cand) * 3), replace=True, p=wflat[cand] / wflat[cand].sum())
+cell = near_xs[1] - near_xs[0]
+for k, i in enumerate(pick):
+    x_ = xs_f[i] + (rng.random() - 0.5) * cell; y_ = ys_f[i] + (rng.random() - 0.5) * cell
+    z_ = float(height(np.array([x_]), np.array([y_]))[0])
+    e = bpy.data.objects.new(f"Sapin {k}", None); e.instance_type = "COLLECTION"; e.instance_collection = cpine
+    e.location = (x_, y_, z_ - 0.3); hh = 9 + rng.random() * 14; e.scale = (hh,) * 3
+    e.rotation_euler = (rng.random() * 6.28, math.radians(-90), 0); C_FOR.objects.link(e)
 def layer_coll(lc, name):
     if lc.collection.name == name: return lc
     for ch in lc.children:
@@ -791,9 +834,9 @@ for i, val in enumerate(gw.ravel()):
 # touffe d'herbe modélisée (brins triangulaires), le long de +X comme les sapins
 def make_tuft(name, seed):
     r_ = np.random.default_rng(seed); V, F = [], []
-    for k in range(14):
-        a_ = r_.random() * 6.28; lean = 0.15 + r_.random() * 0.35; hgt = 0.6 + r_.random() * 0.5; w = 0.025
-        bx, by = r_.normal() * 0.06, r_.normal() * 0.06
+    for k in range(32):
+        a_ = r_.random() * 6.28; lean = 0.1 + r_.random() * 0.4; hgt = 0.45 + r_.random() * 0.6; w = 0.018
+        bx, by = r_.normal() * 0.12, r_.normal() * 0.12
         ca, sa = math.cos(a_), math.sin(a_)
         o = len(V)
         V += [(bx - sa * w, by + ca * w, 0), (bx + sa * w, by - ca * w, 0), (bx + ca * lean, by + sa * lean, hgt)]
@@ -805,20 +848,76 @@ def make_tuft(name, seed):
         gm, gnt, gb, _ = new_mat("Herbe (brins)"); gnn = N(gnt)
         g_, sep_ = gnn.n("ShaderNodeNewGeometry"), None
         oi = gnn.n("ShaderNodeObjectInfo")
-        cc = gnn.mix(oi.outputs["Random"], (0.03, 0.075, 0.01, 1), (0.17, 0.21, 0.04, 1))
+        ptch = gnn.n("ShaderNodeTexNoise", i_Scale=0.08, i_Detail=4); gnn.l(oi.outputs["Location"], ptch.inputs["Vector"])
+        cc = gnn.mix(oi.outputs["Random"], (0.035, 0.085, 0.012, 1), (0.13, 0.19, 0.03, 1))
+        dry = gnn.n("ShaderNodeMapRange", i_From__Min=0.5, i_From__Max=0.7, i_To__Min=0.0, i_To__Max=0.75); gnn.l(ptch.outputs["Fac"], dry.inputs[0])
+        cc = gnn.mix(gnn.math("MULTIPLY", dry.outputs[0], oi.outputs["Random"]), cc, (0.36, 0.30, 0.12, 1))
         gnn.l(cc, gb.inputs["Base Color"]); gb.inputs["Roughness"].default_value = 0.7
         try: gb.inputs["Subsurface Weight"].default_value = 0.15
         except Exception: pass
     me.materials.append(gm)
     ob = bpy.data.objects.new(name, me); C_LIB.objects.link(ob); return ob
 ctuft = coll("Touffes d'herbe", C_LIB)
-for k in range(4):
+for k in range(6):
     t_ = make_tuft(f"Touffe {k}", 300 + k); C_LIB.objects.unlink(t_); ctuft.objects.link(t_)
+    if k >= 4: t_.scale = (1.8, 1.0, 1.0)  # herbes hautes
+cflow = coll("Fleurs", C_LIB)
+for k, col in enumerate(((0.9, 0.88, 0.8, 1), (0.85, 0.65, 0.05, 1), (0.35, 0.18, 0.6, 1))):
+    bm_ = bmesh.new(); bmesh.ops.create_icosphere(bm_, subdivisions=1, radius=0.035, matrix=Matrix.Translation((0.28, 0, 0)))
+    bmesh.ops.create_cone(bm_, cap_ends=False, segments=3, radius1=0.004, radius2=0.004, depth=0.28, matrix=Matrix.Translation((0.14, 0, 0)) @ Matrix.Rotation(math.radians(90), 4, "Y"))
+    me_ = bpy.data.meshes.new(f"Fleur {k}"); bm_.to_mesh(me_); bm_.free(); me_.materials.append(mat_simple(f"Pétales {k}", col, 0.6))
+    fo = bpy.data.objects.new(f"Fleur {k}", me_); cflow.objects.link(fo)
 pm = pel.modifiers.new("Herbe", "PARTICLE_SYSTEM"); gs = pm.particle_system.settings
 gs.type = "HAIR"; gs.count = 6000 if PREVIEW else 90000; gs.hair_length = 1.0; gs.emit_from = "FACE"; gs.distribution = "RAND"
 gs.render_type = "COLLECTION"; gs.instance_collection = ctuft; gs.use_collection_pick_random = True
 gs.particle_size = 0.32; gs.size_random = 0.7; gs.use_rotations = False
 pm.particle_system.vertex_group_density = "densité herbe"; pm.particle_system.seed = 5
+gs.count = 60000 if PREVIEW else 420000
+gs.particle_size = 0.28
+pf = pel.modifiers.new("Fleurs", "PARTICLE_SYSTEM"); fs = pf.particle_system.settings
+fs.type = "HAIR"; fs.count = 600 if PREVIEW else 7000; fs.hair_length = 1.0; fs.render_type = "COLLECTION"; fs.instance_collection = cflow
+fs.use_collection_pick_random = True; fs.particle_size = 1.0; fs.size_random = 0.5; fs.use_rotations = False
+pf.particle_system.vertex_group_density = "densité herbe"; pf.particle_system.seed = 8
+# chemin de gravier depuis le parvis d'entrée
+def mat_gravier():
+    m, nt, b, _ = new_mat("Gravier"); n = N(nt); g, sep = n.pos()
+    vo = n.n("ShaderNodeTexVoronoi", i_Scale=38.0); n.l(g.outputs["Position"], vo.inputs["Vector"])
+    c = n.mix(vo.outputs["Distance"], (0.42, 0.39, 0.35, 1), (0.16, 0.15, 0.14, 1))
+    c = n.mix(n.math("MULTIPLY", vo.outputs["Color"], None, vb=0.4), c, (0.55, 0.5, 0.42, 1))
+    n.l(c, b.inputs["Base Color"]); b.inputs["Roughness"].default_value = 0.95
+    n.bump(b, n.math("SUBTRACT", None, vo.outputs["Distance"], va=1.0), 0.9, 0.02)
+    return m
+path_pts = [(10.2, 8.2), (11.0, 11.5), (13.5, 16.0), (17.5, 21.0), (22.0, 27.0), (27.0, 35.0), (31.0, 45.0)]
+V, F = [], []
+for i, (px, py) in enumerate(path_pts):
+    qx, qy = path_pts[min(i + 1, len(path_pts) - 1)]; ox, oy = path_pts[max(i - 1, 0)]
+    tx, ty = qx - ox, qy - oy; ln = math.hypot(tx, ty); nx_, ny_ = -ty / ln, tx / ln
+    for s_ in (-1.3, 1.3):
+        x_, y_ = px + nx_ * s_, py + ny_ * s_
+        V.append((x_, y_, float(height(np.array([x_]), np.array([y_]))[0]) + 0.06))
+    if i: F.append((2 * i - 2, 2 * i - 1, 2 * i + 1, 2 * i))
+mesh_obj("Chemin de gravier", V, F, [mat_gravier()], None, C_VEG)
+# clôture à lisses en bois
+M_FENCE = mat_simple("Bois de clôture grisé", (0.22, 0.2, 0.17, 1), 0.85)
+fence = [(-12, -10), (-12, 20), (2, 30)]
+for (ax_, ay_), (bx_, by_) in zip(fence, fence[1:]):
+    ln = math.hypot(bx_ - ax_, by_ - ay_); n_ = int(ln / 2.4)
+    prev = None
+    for k in range(n_ + 1):
+        x_, y_ = ax_ + (bx_ - ax_) * k / n_, ay_ + (by_ - ay_) * k / n_
+        z_ = float(height(np.array([x_]), np.array([y_]))[0])
+        cylinder("Piquet de clôture", (x_, y_, z_ - 0.2), (x_, y_, z_ + 1.15), 0.06, M_FENCE, C_VEG, 8)
+        if prev:
+            for hz in (0.55, 1.0): cylinder("Lisse de clôture", (prev[0], prev[1], prev[2] + hz), (x_, y_, z_ + hz), 0.045, M_FENCE, C_VEG, 8)
+        prev = (x_, y_, z_)
+# salon de jardin sur la terrasse
+mb = MB(); tx_, ty_ = 3.6, -1.8
+mb.box(tx_ - 0.9, tx_ + 0.9, ty_ - 0.45, ty_ + 0.45, 0.68, 0.73, 0)
+for sx in (-1, 1):
+    for sy in (-1, 1): mb.box(tx_ + sx * 0.8 - 0.04, tx_ + sx * 0.8 + 0.04, ty_ + sy * 0.37 - 0.04, ty_ + sy * 0.37 + 0.04, -0.05, 0.68, 0)
+    mb.box(tx_ - 0.9, tx_ + 0.9, ty_ + sx * 0.8 - 0.17, ty_ + sx * 0.8 + 0.17, 0.4, 0.45, 0)
+    for ex in (-0.8, 0.8): mb.box(tx_ + ex - 0.04, tx_ + ex + 0.04, ty_ + sx * 0.8 - 0.12, ty_ + sx * 0.8 + 0.12, -0.05, 0.4, 0)
+mb.obj("Salon de jardin", [mat("chene")], C_DECOR, bevel=0.01)
 # arbres isolés près de la maison (composition)
 for k, (x_, y_, hh) in enumerate(((-16, 9, 15), (-19, 14, 18), (-12, 18, 13), (27, 15, 16), (31, 9, 19), (24, 22, 14), (-22, -4, 12), (33, -2, 13), (16, 26, 17), (-5, 26, 15))):
     inst = bpy.data.objects.new(f"Sapin isolé {k}", None); inst.instance_type = "COLLECTION"; inst.instance_collection = cpine
@@ -851,15 +950,30 @@ sky = wn.nodes.new("ShaderNodeTexSky")
 for t_ in ("MULTIPLE_SCATTERING", "SINGLE_SCATTERING", "HOSEK_WILKIE"):
     try: sky.sky_type = t_; break
     except Exception: pass
-SUN_EL, SUN_AZ = math.radians(24), math.radians(238)    # milieu d'après-midi, soleil sud-sud-ouest
+SUN_EL, SUN_AZ = math.radians(31), math.radians(226)    # milieu d'après-midi, soleil sud-sud-ouest
 try:
+    sky.aerosol_density = 0.35; sky.air_density = 1.0; sky.ozone_density = 1.2
     sky.sun_disc = False; sky.sun_elevation = SUN_EL; sky.sun_rotation = math.radians(90) - SUN_AZ + math.pi; sky.altitude = 1400
 except Exception: pass
-bg = wn.nodes.new("ShaderNodeBackground"); bg.inputs["Strength"].default_value = 0.32
+bg = wn.nodes.new("ShaderNodeBackground"); bg.inputs["Strength"].default_value = 0.42
 wo = wn.nodes.new("ShaderNodeOutputWorld")
-wn.links.new(sky.outputs[0], bg.inputs[0]); wn.links.new(bg.outputs[0], wo.inputs[0])
+# couche de nuages (projection plane sur la voûte, fondu à l'horizon)
+wnn = N(wn)
+tc = wnn.n("ShaderNodeTexCoord"); sd = wnn.n("ShaderNodeSeparateXYZ"); wnn.l(tc.outputs["Generated"], sd.inputs[0])
+dz = wnn.math("ADD", wnn.math("MAXIMUM", sd.outputs[2], None, vb=0.0), None, vb=0.06)
+cu = wnn.n("ShaderNodeCombineXYZ")
+wnn.l(wnn.math("DIVIDE", sd.outputs[0], dz), cu.inputs[0]); wnn.l(wnn.math("DIVIDE", sd.outputs[1], dz), cu.inputs[1])
+mpc = wnn.n("ShaderNodeMapping"); mpc.inputs["Scale"].default_value = (0.55, 0.9, 1); mpc.inputs["Location"].default_value = (3.3, 1.2, 0)
+wnn.l(cu.outputs[0], mpc.inputs["Vector"])
+cl = wnn.n("ShaderNodeTexNoise", i_Scale=0.8, i_Detail=14.0, i_Roughness=0.66, i_Distortion=0.6); wnn.l(mpc.outputs[0], cl.inputs["Vector"])
+cov = wnn.n("ShaderNodeMapRange", i_From__Min=0.50, i_From__Max=0.64, i_To__Min=0.0, i_To__Max=1.0); wnn.l(cl.outputs["Fac"], cov.inputs[0])
+fade = wnn.n("ShaderNodeMapRange", i_From__Min=0.01, i_From__Max=0.22, i_To__Min=0.0, i_To__Max=0.92); wnn.l(sd.outputs[2], fade.inputs[0])
+mask = wnn.math("MULTIPLY", cov.outputs[0], fade.outputs[0])
+shade = wnn.n("ShaderNodeMapRange", i_From__Min=0.5, i_From__Max=0.85, i_To__Min=0.0, i_To__Max=1.0); wnn.l(cl.outputs["Fac"], shade.inputs[0])
+ccol = wnn.mix(shade.outputs[0], (1.1, 1.12, 1.18, 1), (3.2, 3.0, 2.7, 1))
+wnn.l(wnn.mix(mask, sky.outputs[0], ccol), bg.inputs[0]); wn.links.new(bg.outputs[0], wo.inputs[0])
 
-sun_d = bpy.data.lights.new("Soleil", "SUN"); sun_d.energy = 4.2; sun_d.angle = math.radians(0.6); sun_d.color = (1.0, 0.94, 0.86)
+sun_d = bpy.data.lights.new("Soleil", "SUN"); sun_d.energy = 4.6; sun_d.angle = math.radians(0.8); sun_d.color = (1.0, 0.86, 0.70)
 sun = bpy.data.objects.new("Soleil", sun_d); C_CAM.objects.link(sun)
 # direction : le soleil vient de l'azimut SUN_AZ (depuis le nord, sens horaire), hauteur SUN_EL
 dirv = Vector((math.sin(SUN_AZ) * math.cos(SUN_EL), math.cos(SUN_AZ) * math.cos(SUN_EL), math.sin(SUN_EL)))
@@ -880,7 +994,7 @@ def camera(name, loc, target, lens):
     return co
 
 cams = {
-    "sud": camera("Caméra façade sud", (-7.5, -15.5, ground(-7.5, -15.5) + 1.65), (6.2, 3.0, 3.6), 24),
+    "sud": camera("Caméra façade sud", (19.5, -14.5, ground(19.5, -14.5) + 1.6), (6.2, 3.0, 3.6), 24),
     "nord": camera("Caméra entrée nord-est", (21.0, 17.5, ground(21.0, 17.5) + 1.65), (6.5, 4.5, 3.0), 26),
     "aerienne": camera("Caméra aérienne", (58.0, -70.0, ground(58, -70) + 30.0), (4.0, 12.0, 6.0), 30),
     "interieur": camera("Caméra séjour", (7.3, 5.2, 1.35), (1.2, 0.0, 1.25), 16),
@@ -904,10 +1018,13 @@ except Exception: pass
 scene.cycles.max_bounces = 6; scene.cycles.caustics_reflective = False; scene.cycles.caustics_refractive = False
 scene.cycles.blur_glossy = 1.0
 r.use_persistent_data = True
-try: scene.view_settings.view_transform = "AgX"; scene.view_settings.look = "AgX - Medium High Contrast"
-except Exception: pass
+scene.view_settings.view_transform = "AgX"
+for lk in ("AgX - Medium High Contrast", "Medium High Contrast"):
+    try: scene.view_settings.look = lk; break
+    except Exception: pass
+print("look :", scene.view_settings.view_transform, scene.view_settings.look)
 scene.view_settings.exposure = 0.0
-r.image_settings.file_format = "JPEG"; r.image_settings.quality = 92
+r.image_settings.file_format = "PNG"; r.image_settings.color_depth = "16"
 
 # ----------------------------------------------------------------- enregistrement + exports
 blend = os.path.join(OUT, f"chalet_{VAR}.blend")
@@ -925,8 +1042,8 @@ if not PREVIEW:
 if not NO_RENDER:
     for k in (CAMS or ["sud", "aerienne", "interieur", "nord"]):
         scene.camera = cams[k]
-        if k == "interieur": scene.cycles.samples = 48 if PREVIEW else 110; scene.view_settings.exposure = 0.9
+        if k == "interieur": scene.cycles.samples = 48 if PREVIEW else 128; scene.view_settings.exposure = 0.55
         else: scene.cycles.samples = 24 if PREVIEW else 96; scene.view_settings.exposure = 0.0
-        r.filepath = os.path.join(OUT, f"rendu_{VAR}_{k}{'_apercu' if PREVIEW else ''}.jpg")
+        r.filepath = os.path.join(OUT, f"brut_{VAR}_{k}{'_apercu' if PREVIEW else ''}.png")
         t0 = time.time(); bpy.ops.render.render(write_still=True)
         print(f"rendu {k} : {time.time() - t0:.0f} s → {r.filepath}", flush=True)
